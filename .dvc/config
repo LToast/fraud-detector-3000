@@ -1,0 +1,4 @@
+[core]
+    remote = origin
+['remote "origin"']
+    url = s3://fraud-detector-3000-dvc-remote

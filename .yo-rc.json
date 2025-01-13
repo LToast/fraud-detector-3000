@@ -1,0 +1,22 @@
+{
+  "generator-sicarator": {
+    "promptValues": {
+      "authorName": "Theo",
+      "authorEmail": "theo.peuckert@gmail.com",
+      "ci": ".github",
+      "includeApi": true,
+      "apiInfrastructure": "aws",
+      "awsRegion": "us-east-2",
+      "includeNatGateway": false,
+      "includeDvc": true,
+      "dvcRemoteType": "s3",
+      "includeStreamlit": false
+    },
+    "projectName": "Fraud Detector 3000",
+    "projectSlug": "fraud-detector-3000",
+    "projectDescription": "Credit card fraud detection with ML Pipeline",
+    "terraformBackendBucketName": "fraud-detector-3000-terraform-backend",
+    "awsAccountId": "*your-aws-account-id*",
+    "dvcRemoteBucketName": "fraud-detector-3000-dvc-remote"
+  }
+}
