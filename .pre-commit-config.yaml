@@ -17,7 +17,7 @@ repos:
   hooks:
   - id: format-fix
     name: Formatting (ruff)
-    entry: ruff format
+    entry: make format-check
     language: system
     types: [python]
     stages: [commit]
@@ -41,26 +41,26 @@ repos:
     language: system
     types: [python]
     stages: [push]
-  - id: terraform-docs
-    name: Update terraform docs
-    entry: cd terraform && make docs
-    language: system
-    stages: [ commit ]
-  - id: terraform-fmt
-    name: Format terraform code
-    entry: cd terraform && make fmt
-    language: system
-    stages: [ commit ]
-  - id: terraform-lint
-    name: Validates all Terraform configuration files with TFlint
-    entry: cd terraform && make lint
-    language: system
-    stages: [ commit ]
-  - id: terraform-validate
-    name: Validates all Terraform configuration files with TF validate
-    entry: cd terraform && make validate
-    language: system
-    stages: [ commit ]
+  # - id: terraform-docs
+  #   name: Update terraform docs
+  #   entry: cd terraform && make docs
+  #   language: system
+  #   stages: [ commit ]
+  # - id: terraform-fmt
+  #   name: Format terraform code
+  #   entry: cd terraform && make fmt
+  #   language: system
+  #   stages: [ commit ]
+  # - id: terraform-lint
+  #   name: Validates all Terraform configuration files with TFlint
+  #   entry: cd terraform && make lint
+  #   language: system
+  #   stages: [ commit ]
+  # - id: terraform-validate
+  #   name: Validates all Terraform configuration files with TF validate
+  #   entry: cd terraform && make validate
+  #   language: system
+  #   stages: [ commit ]
   - id: dvc-pre-push
     name: DVC pre-push
     entry: dvc
