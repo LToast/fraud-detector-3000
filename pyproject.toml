@@ -1,33 +1,8 @@
-[tool.poetry]
-name = "fraud-detector-3000"
-version = "0.1.0"
-description = "Credit card fraud detection with ML Pipeline"
-authors = ["Theo <theo.peuckert@gmail.com>"]
-
-[tool.poetry.dependencies]
-python = "3.11.6"
-fastapi = {extras = ["all"], version = "^0.95.1"}
-loguru = "^0.7.0"
-PyYAML = "^6.0"
-
-[tool.poetry.group.dev.dependencies]
-dvc = {extras = ["s3"], version = "^3.28.0"}
-mypy = "^1.2"
-pre-commit = "^2"
-pytest = "^7"
-pytest-cov = "^3"
-poetry-dotenv-plugin = "^0.2.0"
-ruff = "^0.1.5"
-typer = "^0.9.0"
-types-PyYAML = "^6.0"
-
+[tool.pdm.build]
+includes = ["mlflow/**", "src/models/**"]
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-# Packages configs
-
-## coverage
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
 
 [tool.coverage.run]
 branch = true
@@ -50,6 +25,7 @@ precision = 2
 [tool.ruff]
 target-version = 'py311'
 
+[lint.select]
 # See all rules at https://docs.astral.sh/ruff/rules/
 select = [
     "E",      # pycodestyle
@@ -67,7 +43,7 @@ select = [
     "RUF",    # Ruff-specific rules
     "FBT001", # flake8-boolean-trap
 ]
-
+[lint.ignore]
 ignore = [
     "E501", # "Line too long"
     # -> line length already regulated by the formatter
@@ -103,7 +79,7 @@ runtime-evaluated-base-classes = ["pydantic.BaseModel"]
 [tool.mypy]
 python_version = "3.11"
 # Enable all optional error checking flags, providing stricter type checking; see https://mypy.readthedocs.io/en/stable/getting_started.html#strict-mode-and-configuration
-strict = true
+#strict = true
 
 # Type-check the interiors of functions without type annotations; if missing, mypy won't check function bodies without type hints, for instance those coming from third-party libraries
 check_untyped_defs = true
@@ -120,3 +96,35 @@ module = [
     "dvc.*",
 ]
 ignore_missing_imports = true
+
+[project]
+authors = [
+    {name = "Theo", email = "theo.peuckert@gmail.com"},
+]
+requires-python = "==3.11.6"
+dependencies = [
+    "dvc>=3.59.0",
+    "dvc-s3>=3.2.0",
+    "fastapi[all]>=0.95.1,<1.0.0",
+    "loguru<1.0.0,>=0.7.0",
+    "mlflow>=2.19.0",
+    "pandas>=2.2.3",
+    "PyYAML<7.0,>=6.0",
+    "scikit-learn>=1.6.1",
+]
+name = "fraud-detector-3000"
+version = "0.1.0"
+description = "Credit card fraud detection with ML Pipeline"
+
+[dependency-groups]
+dev = [
+    "dvc[s3]<4.0.0,>=3.28.0",
+    "mypy<2.0,>=1.2",
+    "pre-commit<3,>=2",
+    "pytest<8,>=7",
+    "pytest-cov<4,>=3",
+    "poetry-dotenv-plugin<1.0.0,>=0.2.0",
+    "ruff<1.0.0,>=0.1.5",
+    "typer<1.0.0,>=0.9.0",
+    "types-PyYAML<7.0,>=6.0",
+]

@@ -1,0 +1,20 @@
+prepare:
+  raw_data: data/raw/creditcard.csv
+  split: 0.20
+  seed: 2018
+
+train:
+  train_csv: data/processed/train.csv
+  valid_csv: data/processed/valid.csv
+  model_path: models/model.pkl  # Updated path to save model in project root
+  split: 0.20
+  seed: 2018
+  rfc_metric: 'gini'  # Metric used for RandomForestClassifier
+  n_estimators: 100  # Number of estimators used for RandomForestClassifier
+  n_jobs: 4          # Number of parallel jobs used for RandomForestClassifier
+
+evaluate:
+  model_path: models/model.pkl  # Updated path to align with new model location
+  valid_csv: data/processed/valid.csv
+  evaluation_path: metrics/evaluation.json
+  seed: 2018

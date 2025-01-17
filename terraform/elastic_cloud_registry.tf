@@ -1,6 +1,7 @@
 resource "aws_ecr_repository" "this" {
   name = "${terraform.workspace}_${var.api_name}_image"
   tags = var.additional_tags
+  force_delete = true
 
 }
 

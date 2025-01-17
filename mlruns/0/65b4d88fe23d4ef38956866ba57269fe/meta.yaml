@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/65b4d88fe23d4ef38956866ba57269fe/artifacts
+end_time: 1737149289708
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 65b4d88fe23d4ef38956866ba57269fe
+run_name: debonair-snipe-951
+run_uuid: 65b4d88fe23d4ef38956866ba57269fe
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737149289670
+status: 3
+tags: []
+user_id: tpeuckert

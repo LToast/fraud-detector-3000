@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/e0e68a7c7fc248c1ad66e55e2ad5f56e/artifacts
+end_time: 1737050078569
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e0e68a7c7fc248c1ad66e55e2ad5f56e
+run_name: brawny-penguin-47
+run_uuid: e0e68a7c7fc248c1ad66e55e2ad5f56e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737050031812
+status: 3
+tags: []
+user_id: tpeuckert

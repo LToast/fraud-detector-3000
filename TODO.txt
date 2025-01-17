@@ -1,0 +1,6 @@
+Mettre à jour la documentation
+Cleaner le code pour enlever les commentaires inutiles
+Ajouter les actions gitlab
+Trouver un moyen de deployer efficacement en dev vs prod
+Faire la collection Postman
+Nettoyer les fichiers inutiles

@@ -1,0 +1,83 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/scripts/prepare_model.py --raw_data-path data/raw/creditcard.csv
+      --split 0.2 --seed 2018
+    deps:
+    - path: data/raw/creditcard.csv
+      hash: md5
+      md5: e90efcb83d69faf99fcab8b0255024de
+      size: 150828752
+    - path: params.yaml
+      hash: md5
+      md5: 741452b2b8777e386a041207dcbfcad1
+      size: 683
+    - path: src/fraud_detector/prepare.py
+      hash: md5
+      md5: 90de538d7018f583fd62b8c59145cbb7
+      size: 1717
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 760e1190d46a8d758bfe7b8b765f7c78.dir
+      size: 150817839
+      nfiles: 3
+  train:
+    cmd: python src/scripts/train_model.py --train_csv data/processed/train.csv --valid_csv
+      data/processed/valid.csv --model_path models/model.pkl --split 0.2 --seed 2018
+      --rfc_metric gini --n_estimators 100 --n_jobs 4
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: e74127e8705aeddc430f2740342475f9
+      size: 96523893
+    - path: data/processed/valid.csv
+      hash: md5
+      md5: 918075a979130b17dd68ea646f6a50f5
+      size: 24130844
+    - path: params.yaml
+      hash: md5
+      md5: 741452b2b8777e386a041207dcbfcad1
+      size: 683
+    - path: src/fraud_detector/constants.py
+      hash: md5
+      md5: cdd1b31f081d86c0f8237789126ce86b
+      size: 168
+    - path: src/fraud_detector/train.py
+      hash: md5
+      md5: 27f10db21459106b8b6cfb92d0c0acd7
+      size: 3794
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: e57d469f9b169518dded7f6010863a5b
+      size: 1806010
+  evaluate:
+    cmd: python src/scripts/evaluate_model.py --model_path models/model.pkl --valid_csv
+      data/processed/valid.csv --evaluation_path metrics/evaluation.json --seed 2018
+    deps:
+    - path: data/processed/valid.csv
+      hash: md5
+      md5: 918075a979130b17dd68ea646f6a50f5
+      size: 24130844
+    - path: models/model.pkl
+      hash: md5
+      md5: e57d469f9b169518dded7f6010863a5b
+      size: 1806010
+    - path: params.yaml
+      hash: md5
+      md5: 741452b2b8777e386a041207dcbfcad1
+      size: 683
+    - path: src/fraud_detector/constants.py
+      hash: md5
+      md5: cdd1b31f081d86c0f8237789126ce86b
+      size: 168
+    - path: src/fraud_detector/evaluate.py
+      hash: md5
+      md5: e464bb2286dc3f8b7e11cb599cedc52e
+      size: 1629
+    outs:
+    - path: metrics/evaluation.json
+      hash: md5
+      md5: e6c573323123a3ef422d96b3fabaf136
+      size: 179

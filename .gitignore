@@ -20,3 +20,10 @@ __pycache__/
 
 # env variables
 .env
+
+#secrets
+secrets
+/model.pkl
+
+#terraform
+.terraform/

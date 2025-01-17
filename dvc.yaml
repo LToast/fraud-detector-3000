@@ -1,0 +1,31 @@
+stages:
+  prepare:
+    cmd: python src/scripts/prepare_model.py --raw_data-path ${prepare.raw_data} --split ${prepare.split} --seed ${prepare.seed}
+    deps:
+      - data/raw/creditcard.csv
+      - src/fraud_detector/prepare.py
+      - params.yaml  # Centralized parameter dependency
+    outs:
+      - data/processed
+
+  train:
+    cmd: python src/scripts/train_model.py --train_csv ${train.train_csv} --valid_csv ${train.valid_csv} --model_path ${train.model_path} --split ${train.split} --seed ${train.seed} --rfc_metric ${train.rfc_metric} --n_estimators ${train.n_estimators} --n_jobs ${train.n_jobs}
+    deps:
+      - data/processed/train.csv
+      - data/processed/valid.csv
+      - src/fraud_detector/constants.py
+      - src/fraud_detector/train.py
+      - params.yaml  # Centralized parameter dependency
+    outs:
+      - models/model.pkl  # Updated path to save model in project root
+
+  evaluate:
+    cmd: python src/scripts/evaluate_model.py --model_path ${evaluate.model_path} --valid_csv ${evaluate.valid_csv} --evaluation_path ${evaluate.evaluation_path} --seed ${evaluate.seed}
+    deps:
+      - models/model.pkl
+      - data/processed/valid.csv
+      - src/fraud_detector/evaluate.py
+      - src/fraud_detector/constants.py
+      - params.yaml  # Centralized parameter dependency
+    outs:
+      - metrics/evaluation.json

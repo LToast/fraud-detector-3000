@@ -8,8 +8,8 @@ resource "aws_lb" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = "${terraform.workspace}ApiGroup" # target group name must only contain alphanumeric (i.e. no "_")
-  target_type = "instance"
+  name        = "${terraform.workspace}ApiGroup" # Ensure unique target group name
+  target_type = "ip"  // Change from "instance" to "ip" for Fargate
   port        = 80
   protocol    = "HTTP"
   vpc_id      = module.vpc.vpc_id
@@ -18,6 +18,11 @@ resource "aws_lb_target_group" "this" {
     path    = "/health"
   }
   tags = var.additional_tags
+
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes        = [name]
+  }
 }
 
 resource "aws_lb_listener" "this" {

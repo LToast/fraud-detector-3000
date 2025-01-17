@@ -65,22 +65,13 @@ To manage the project infrastructure, you will need to install:
 
 ### Python virtual environment and dependencies
 
-1. Create a `pyenv` virtual environment and link it to your project folder:
+1. Install  and environment with `uv`:
 
     ```bash
-    pyenv virtualenv 3.11.6 fraud-detector-3000
-    pyenv local fraud-detector-3000
+    uv sync
     ```
 
-    *Now, every time you are in your project directory your virtualenv will be activated!*
-
-2. Install dependencies with `Poetry`:
-
-    ```bash
-    poetry install --no-root
-    ```
-
-Steps 1. and 2. can also be done in one command:
+Or
 
 ```bash
 make install
@@ -147,6 +138,12 @@ Set up your AWS account locally to be able to access the different resources:
 poetry run pre-commit install
 ```
 
+### Setup MLflow Tracking URI
+
+To configure local MLflow tracking, run:
+```bash
+export MLFLOW_TRACKING_URI=http://localhost:5000
+```
 
 ### Pull data from DVC remote
 
@@ -154,10 +151,36 @@ poetry run pre-commit install
 - Pull the data:
 
   ```bash
-  dvc pull
+  uv run dvc pull
   ```
 
+### Rerunning the Pipeline with DVC
 
+To rerun the entire pipeline, execute the following command:
+
+```bash
+uv run dvc repro
+```
+
+This command will sequentially run all stages defined in `dvc.yaml`, including data preparation, model training, and evaluation. Ensure that all dependencies are up-to-date before rerunning the pipeline.
+
+If you need to rerun a specific stage, specify the stage name:
+
+```bash
+uv run dvc repro <stage_name>
+```
+
+For example, to rerun the training stage:
+
+```bash
+uv run dvc repro train
+```
+
+Or you can just use:
+
+```bash
+make repro
+```
 ## Testing
 
 To run unit tests, run `pytest` with:
@@ -179,7 +202,7 @@ make test
 To check code formatting, run `ruff format` with:
 
 ```bash
-ruff format --check .
+uv run ruff format --check .
 ```
 
 or
@@ -196,7 +219,7 @@ your code each time you save a file.
 To run static analysis, run `ruff` with:
 
 ```bash
-ruff check src tests
+uv run ruff check src tests
 ```
 
 or
@@ -216,7 +239,7 @@ make lint-fix
 To type check your code, run `mypy` with:
 
 ```bash
-mypy src --explicit-package-bases --namespace-packages
+uv run mypy src --explicit-package-bases --namespace-packages
 ```
 
 or
@@ -296,3 +319,9 @@ If the plan suits what you were expecting, provision the development environment
   terraform apply
   ```
 
+## MLflow Integration
+
+Added local MLflow tracking with runs stored in the `mlflow/mlruns` directory.
+
+- MLflow Tracking URI is set to `mlflow/mlruns`
+- Ensure `mlflow` is included in `.gitignore`

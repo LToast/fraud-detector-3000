@@ -1,75 +1,113 @@
 ########################################################################################################################
-# Project installation
+# 🚀 Project Installation
 ########################################################################################################################
 
-install:
-	pyenv virtualenv --force 3.11.6 fraud-detector-3000
-	pyenv local fraud-detector-3000
-	# Running poetry install inside a Make command requires a VIRTUAL_ENV variable
-	VIRTUAL_ENV=$$(pyenv prefix) poetry install --no-root --sync
+.PHONY: install
+install: ## Install the virtual environment and install the pre-commit hooks
+	@echo "🚀 Creating virtual environment using uv..."
+	@uv sync
 
 ########################################################################################################################
-# Quality checks
+# 🚀 Quality Checks
 ########################################################################################################################
 
-test:
-	poetry run pytest tests --cov src --cov-report term --cov-report=html --cov-report xml --junit-xml=tests-results.xml
+.PHONY: test
+test: ## Test the code with pytest
+	@echo "🚀 Testing code with pytest..."
+	@uv run pytest tests
 
-format-check:
-	poetry run ruff format --check src tests
+.PHONY: format-check
+format-check: ## Check the formatting of the code
+	@echo "🚀 Checking code formatting with ruff..."
+	@uvx ruff format --check src tests
 
-format-fix:
-	poetry run ruff format src tests
+.PHONY: format-fix
+format-fix: ## Fix the formatting of the code
+	@echo "🚀 Fixing code formatting with ruff..."
+	@uvx ruff format src tests
 
-lint-check:
-	poetry run ruff check src tests
+.PHONY: lint-check
+lint-check: ## Check the code with ruff
+	@echo "🚀 Checking code lint with ruff..."
+	@uvx ruff check src tests
 
-lint-fix:
-	poetry run ruff check src tests --fix
+.PHONY: lint-fix
+lint-fix: ## Fix the code with ruff
+	@echo "🚀 Fixing code lint with ruff..."
+	@uvx ruff check src tests --fix
 
-type-check:
-	poetry run mypy src
+.PHONY: type-check
+type-check: ## Check the types of the code with mypy
+	@echo "🚀 Checking code types with mypy..."
+	@uvx mypy src
+
 
 ########################################################################################################################
-# Api
+# 🚀 API
 ########################################################################################################################
 
-start-api:
-	docker compose up -d
+.PHONY: start-api
+start-api: ## Start the API
+	@echo "🚀 Starting the API..."
+	@docker-compose up -d
+
 
 ########################################################################################################################
-# Deployment
+# 🚀 Deployment
 ########################################################################################################################
 
-AWS_ACCOUNT_URL=*your-aws-account-id*.dkr.ecr.us-east-2.amazonaws.com
+AWS_ACCOUNT_URL=072425947059.dkr.ecr.us-east-2.amazonaws.com
 AWS_REGION=us-east-2
-ECR_REPOSITORY_NAME=dev_api_image
-ECS_CLUSTER_NAME=dev_api_cluster
-ECS_SERVICE_NAME=dev_api_service
+ECR_REPOSITORY_NAME=default_api_image
+ECS_CLUSTER_NAME=default_api_cluster
+ECS_SERVICE_NAME=default_api_service
 IMAGE_URL=${AWS_ACCOUNT_URL}/${ECR_REPOSITORY_NAME}
 
-ecr-login:
-	aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_URL}
+.PHONY: ecr-login
+ecr-login: ## Log in to AWS ECR
+	@echo "🚀 Logging in to AWS ECR..."
+	@aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_URL}
 
-# Redeployment of ECS service to take into account the new image
-redeploy-ecs-service:
-	aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment --no-cli-pager
+.PHONY: redeploy-ecs-service
+redeploy-ecs-service: ## Force redeployment of ECS service
+	@echo "🚀 Redeploying ECS service..."
+	@aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment --region=${AWS_REGION}
 
-deploy-api-from-x86:
+.PHONY: deploy-api-from-x86
+deploy-api-from-x86: ## Deploy the API using a standard x86 build
+	@echo "🚀 Deploying API from x86..."
 	make ecr-login
-	# build image
 	docker build . -t api
-
-	# tag and push image to ecr
 	docker tag api ${IMAGE_URL}:latest
 	docker push ${IMAGE_URL}:latest
-
 	make redeploy-ecs-service
 
-# When building an image from an ARM processor (Mac M1 or M2) with the standard way (`deploy-api-from-x86`), the
-# resulting image can only be run on ARM machines (which is not the case of the provisioned instance). Using `buildx`
-# allows to overcome this limitation, by specifying for which platform the image is built.
-deploy-api-from-arm:
+.PHONY: deploy-api-from-arm
+deploy-api-from-arm: ## Deploy the API using an ARM build (Mac M1, M2)
+	@echo "🚀 Deploying API from ARM..."
 	make ecr-login
 	docker buildx build --platform linux/amd64 --push -t ${IMAGE_URL}:latest .
 	make redeploy-ecs-service
+
+########################################################################################################################
+# 🚀 DVC
+########################################################################################################################
+
+.PHONY: repro
+repro: ## Reproduce DVC pipeline
+	@echo "🚀 Running DVC repro..."
+	@uv run dvc repro
+
+
+########################################################################################################################
+# 🚀 Help
+########################################################################################################################
+
+.PHONY: help
+help:
+	@echo "================================================="
+	@echo "🚀 Fraud Detector 3000 – Available Make Targets:"
+	@echo "================================================="
+	@uv run python -c "import re; [print(f'\033[36m{m[0]:<20}\033[0m {m[1]}') for m in re.findall(r'^([a-zA-Z-]+):.*?## (.*)$$', open('Makefile').read(), re.M)]"
+
+.DEFAULT_GOAL := help
