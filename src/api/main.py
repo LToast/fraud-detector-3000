@@ -35,6 +35,7 @@ logger.add(
 def get_latest_model() -> PyFuncModel:
     """Get the latest model from MLflow Model Registry."""
     client = mlflow.tracking.MlflowClient()
+    mlflow.set_tracking_uri("http://localhost:5000")  # type: ignore
     latest_version = client.get_latest_versions("fraud-detector")[0]
     return mlflow.pyfunc.load_model(f"models:/fraud-detector/{latest_version.version}")  # type: ignore
 
