@@ -3,41 +3,15 @@
 > Credit card fraud detection with ML Pipeline
 
 ## Project requirements
+### uv
 
-### Pyenv and `Python 3.11.6`
-
-- Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions and virtual environments:
-
-  ```bash
-  curl -sSL https://pyenv.run | bash
-  ```
-
-  - If you are on MacOS and experiencing errors on python install with pyenv, follow this [comment](https://github.com/pyenv/pyenv/issues/1740#issuecomment-738749988)
-  - Add these lines to your `~/.bashrc` or `~/.zshrc` to be able to activate `pyenv virtualenv`:
-
-      ```bash
-      eval "$(pyenv init -)"
-      eval "$(pyenv virtualenv-init -)"
-      eval "$(pyenv init --path)"
-      ```
-
-  - Restart your shell
-
-- Install the right version of `Python` with `pyenv`:
+- Install [uv](https://example.com/uv) to manage your dependencies and tooling configs:
 
   ```bash
-  pyenv install 3.11.6
+  curl -sSL https://install.uv.com | sh -s -- --version 1.7.0
   ```
 
-### Poetry
-
-- Install [Poetry](https://python-poetry.org) to manage your dependencies and tooling configs:
-
-  ```bash
-  curl -sSL https://install.python-poetry.org | python - --version 1.7.0
-  ```
-
-  *If you have not previously installed any Python version, you may need to set your global Python version before installing Poetry:*
+  *If you have not previously installed any Python version, you may need to set your global Python version before installing uv:*
 
     ```bash
     pyenv global 3.11.6
