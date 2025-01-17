@@ -63,7 +63,7 @@ repos:
   #   stages: [ commit ]
   - id: dvc-pre-push
     name: DVC pre-push
-    entry: dvc
+    entry: uv run dvc
     args:
       - git-hook
       - pre-push
@@ -73,7 +73,7 @@ repos:
     stages: [push]
   - id: dvc-post-checkout
     name: DVC post-checkout
-    entry: dvc
+    entry:  uv run dvc
     args:
       - git-hook
       - post-checkout
