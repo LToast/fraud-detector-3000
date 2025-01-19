@@ -55,6 +55,10 @@ start-api: ## Start the API
 ########################################################################################################################
 # 🚀 Deployment
 ########################################################################################################################
+.PHONY: promote-model --model <MODEL_NAME> --stage <STAGE>
+promote-model: ## Promote the model to a specified stage
+	@echo "🚀 Promoting model..."
+	@uv run python src/scripts/promote_model.py --model $(MODEL_NAME) --stage $(STAGE)
 
 AWS_ACCOUNT_URL=072425947059.dkr.ecr.us-east-2.amazonaws.com
 AWS_REGION=us-east-2
