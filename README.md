@@ -100,6 +100,12 @@ fraud-detector-3000/
    - Makefile scripts facilitate common tasks such as installing dependencies, running tests, formatting code, and deploying the API.
    - The pipeline ensures that changes are consistently tested and deployed, minimizing downtime and errors.
 
+## Cavehats and TODO
+* Fix the GitHub actions to properly set up the aws credentials
+* Host a dediacted mlflow server so the API can benefit from the Mlflow registery
+
+
+
 ## Project requirements
 ### uv
 
