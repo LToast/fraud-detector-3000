@@ -1,30 +1,28 @@
-name: "Install Dependencies"
-description: "Action to build the project dependencies using uv"
+name: Build and Deploy
 
-inputs:
-  python_version:
-    required: true
-    type: string
-    default: "3.11.6"
-  uv_version:
-    required: true
-    type: string
-    default: "latest"
+on:
+  push:
+    branches:
+      - dev
+      - main
 
-runs:
-  using: "composite"
-  steps:
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ inputs.python_version }}
-        cache: "pip"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-    - name: Install Uv
-      run: |
-        curl -sSL https://path.to/uv/install.sh | bash -s -- --version ${{ inputs.uv_version }}
-        echo "${HOME}/.local/bin" >> $GITHUB_PATH
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Install Dependencies
-      run: uv sync
-      shell: bash
+      - name: Log in to AWS ECR
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.AWS_REGION }}
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} \
+              docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_URL }}
+      - name: Build and Push Docker Image
+        run: make deploy-api-from-x86
+
+      - name: Redeploy ECS Service
+        run: make redeploy-ecs-service
