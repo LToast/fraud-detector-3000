@@ -25,6 +25,7 @@ RUN uv sync --frozen
 
 # Copy API files
 COPY src/api ./src/api
+COPY models ./models
 
 # Add and set a non-root user
 RUN useradd appuser && chown -R appuser /app && chown -R appuser /root/.local

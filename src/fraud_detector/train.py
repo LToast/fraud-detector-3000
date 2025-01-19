@@ -1,7 +1,7 @@
 from sklearn.ensemble import RandomForestClassifier  # type: ignore
 import pandas as pd  # type: ignore
 import pickle
-import mlflow
+import mlflow  # type: ignore
 import mlflow.sklearn  # type: ignore
 import os
 from mlflow.tracking import MlflowClient  # type: ignore
