@@ -1,12 +1,13 @@
 """FastAPI app creation, logger configuration and main API routes."""
 
 import sys
-import mlflow
+import mlflow  # type: ignore
 import mlflow.pyfunc  # type: ignore
 from fastapi import FastAPI, HTTPException  # type: ignore
 from loguru import logger  # type: ignore
 
 from src.api.types import HealthRouteOutput
+import joblib  # type: ignore
 from src.fraud_detector.types import (
     PredictionInput,
     PredictionOutput,
@@ -40,14 +41,18 @@ def get_latest_model() -> PyFuncModel:
     return mlflow.pyfunc.load_model(f"models:/fraud-detector/{latest_version.version}")  # type: ignore
 
 
+def load_model() -> PyFuncModel:
+    return joblib.load("models/model.pkl")
+
+
 app = FastAPI()
 
 # Load the trained model at startup from MLflow registry
 try:
-    model = get_latest_model()
-    logger.info(
-        f"Loaded model version: {mlflow.get_run(model.metadata.run_id).data.tags.get('version', 'unknown')}"  # type: ignore
-    )  # type: ignore
+    model = load_model()
+    # logger.info(
+    #     f"Loaded model version: {mlflow.get_run(model.metadata.run_id).data.tags.get('version', 'unknown')}"  # type: ignore
+    # )  # type: ignore
 except Exception as e:
     logger.error(f"Failed to load model: {e}")
     raise RuntimeError("Could not load model from MLflow registry")

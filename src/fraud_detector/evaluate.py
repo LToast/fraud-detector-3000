@@ -8,7 +8,7 @@ from sklearn.metrics import (  # type: ignore
     roc_auc_score,
 )
 import os
-import mlflow
+import mlflow  # type: ignore
 from src.fraud_detector.types import EvaluateModelParams  # Already centralized
 
 
