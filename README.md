@@ -32,29 +32,48 @@ fraud-detector-3000/
 │   ├── processed/
 │   └── raw/
 ├── docs/
+│   ├── architecture.png
+│   ├── high_level_architecture.png/
+│   ├── README_how_to_run.md
+│   └── README_intro.md
+├── metrics/
 ├── models/
 ├── notebooks/
 ├── src/
 │   ├── __init__.py
 │   ├── api/
+│   │   ├── __init__.py
 │   │   ├── main.py
-│   │   └── routes.py
-│   ├── data/
-│   │   └── make_dataset.py
-│   ├── features/
-│   │   └── build_features.py
+│   │   └── types.py
 │   ├── fraud_detector/
 │   │   ├── __init__.py
 │   │   ├── constants.py
+│   │   ├── evaluate.py
 │   │   ├── prepare.py
-│   │   └── train.py
+│   │   ├── train.py
+│   │   └── types.py
+│   ├── notebooks/
+│   │   └── first_test.py
 │   └── scripts/
+│       ├── __init__.py
+│       ├── constants.py
+│       ├── evaluate_model.py
 │       ├── prepare_model.py
-│       └── __init__.py
+│       ├── promote_model.py
+│       └── train_model.py
+├── terraform/
+│   └── makefile
 ├── tests/
-│   └── __init__.py
-├── tox.ini
+│   ├── __init__.py
+│   └── api
+│       ├── __init__.py
+│       └── test_main.py
+├── Makefile
+├── Dockerfile
+├── params.yaml
 ├── pyproject.toml
+
+
 └── uv.lock
 ```
 
